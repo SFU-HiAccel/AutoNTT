@@ -1,0 +1,56 @@
+def radix2PeaseTransformRToN():
+    line = ""
+    line += "/*" + "\n"
+    line += "Compute NTT using radix-2 Pease FFT" + "\n"
+    line += "Input is provided in bit reversed order. Hence, TF are used in ascending power order." + "\n"
+    line += "*/" + "\n"
+    line += "void radix2PeaseTransformRToN(std::vector<WORD>& boInvec, std::vector<WORD>& noTFArr, WORD mod, VAR_TYPE_32 N, WORD NUMPE){" + "\n"
+    line += "  WORD stages = myLog2(N);//log2(((VAR_TYPE_32)N));" + "\n"
+    line += "  if((1<<stages)!=N){" + "\n"
+    line += "    printf(\"[Error]::Size is not a 2 to the power number\\n\");" + "\n"
+    line += "    exit(0);" + "\n"
+    line += "  }" + "\n"
+    line += "" + "\n"
+    line += "  WORD temp[N];" + "\n"
+    line += "" + "\n"
+    line += "  WORD beta = (1<<(stages-1))/NUMPE;" + "\n"
+    line += "  " + "\n"
+    line += "  for(WORD l=stages; l>0; l--){" + "\n"
+    line += "    for(WORD j=0; j<beta; j++){" + "\n"
+    line += "      for(WORD i=0; i<NUMPE; i++){" + "\n"
+    line += "        WORD delta = i*beta + j;" + "\n"
+    line += "        WORD pow = (((2*delta + 1)>>l) << (l-1));" + "\n"
+    line += "      " + "\n"
+    line += "        WORD tfVal = noTFArr[pow];" + "\n"
+    line += "" + "\n"
+    line += "        WORD left = boInvec[delta<<1];" + "\n"
+    line += "" + "\n"
+    line += "        WORD right = (WORD)((((DWORD)boInvec[(delta<<1) + 1]) * ((DWORD)tfVal)) % ((DWORD)mod));" + "\n"
+    line += "" + "\n"
+    line += "        temp[delta] = (WORD)((((DWORD)left) + ((DWORD)right)) % ((DWORD)mod));" + "\n"
+    line += "        " + "\n"
+    line += "        if(left >= right){" + "\n"
+    line += "          temp[delta + (1<<(stages-1))] = (WORD)((((DWORD)left) - ((DWORD)right)) % ((DWORD)mod)); //probably, we can remove this last mod(%) operation" + "\n"
+    line += "        }" + "\n"
+    line += "        else{" + "\n"
+    line += "          temp[delta + (1<<(stages-1))] = (WORD)((((DWORD)mod) - (((DWORD)right) - ((DWORD)left))) % ((DWORD)mod));  //probably, we can remove this last mod(%) operation" + "\n"
+    line += "        }" + "\n"
+    line += "      }" + "\n"
+    line += "    }" + "\n"
+    line += "    " + "\n"
+    line += "    for(WORD h=0; h<N; h++){" + "\n"
+    line += "      boInvec[h] = temp[h];" + "\n"
+    line += "    }" + "\n"
+    line += "  }" + "\n"
+    line += "}" + "\n"
+    return line
+
+def gen_host_NTT_compute_functions():
+
+    line = ""
+
+    # tensor product based NTT
+    line += radix2PeaseTransformRToN()
+    line += "\n"
+
+    return line

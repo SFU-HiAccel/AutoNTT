@@ -1,0 +1,9 @@
+{
+  "LUT": 520000,
+  "FF": 1040000,
+  "DSP": 3000,
+  "BRAM": 500,
+  "URAM": 128,
+  "offchip_BW": 220,
+  "offchip_type": "HBM"
+}

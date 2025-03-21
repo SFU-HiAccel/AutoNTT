@@ -1,0 +1,117 @@
+// === BEGIN DEFS ===
+ap_uint<96> hardcoded_fullMul_48x48(ap_uint<48> u, ap_uint<48> v){
+  #pragma HLS inline
+
+  ap_uint<17> u_0 = u & ((1<<17)-1);
+  u = u >> 17;
+  ap_uint<17> u_1 = u & ((1<<17)-1);
+  u = u >> 17;
+  ap_uint<14> u_2 = u & ((1<<14)-1);
+
+  ap_uint<27> v_0 = v & ((1<<27)-1);
+  v = v >> 27;
+  ap_uint<21> v_1 = v & ((1<<21)-1);
+  
+  ap_uint<44> mul_0 = ((ap_uint<44>)(u_0) * v_0); //<<0
+  #pragma HLS bind_op variable=mul_0 op=mul impl=dsp
+  ap_uint<44> mul_1 = ((ap_uint<44>)(u_1) * v_0); //<<17
+  #pragma HLS bind_op variable=mul_1 op=mul impl=dsp
+  ap_uint<41> mul_2 = ((ap_uint<41>)(u_2) * v_0); //<<34
+  #pragma HLS bind_op variable=mul_2 op=mul impl=dsp
+
+  ap_uint<38> mul_3 = ((ap_uint<38>)(u_0) * v_1); //<<27
+  #pragma HLS bind_op variable=mul_3 op=mul impl=dsp
+  ap_uint<38> mul_4 = ((ap_uint<38>)(u_1) * v_1); //<<44
+  #pragma HLS bind_op variable=mul_4 op=mul impl=dsp
+  ap_uint<35> mul_5 = ((ap_uint<35>)(u_2) * v_1); //<<61
+  #pragma HLS bind_op variable=mul_5 op=mul impl=dsp
+
+  
+  ap_uint<96> res = ( (((ap_uint<96>)mul_0)<<0) + (((ap_uint<96>)mul_1)<<17) + (((ap_uint<96>)mul_2)<<34) + (((ap_uint<96>)mul_3)<<27) + (((ap_uint<96>)mul_4)<<44) + (((ap_uint<96>)mul_5)<<61) );
+  return res;
+}
+
+ap_uint<48> WLM_mul_default_multiplier_12x36(ap_uint<12> u, ap_uint<36> v){
+  #pragma HLS inline
+
+  ap_uint<12> u_0 = u & ((1<<12)-1);
+
+  ap_uint<27> v_0 = v & ((1<<27)-1);
+  v = v >> 27;
+  ap_uint<9> v_1 = v & ((1<<9)-1);
+  
+  ap_uint<39> mul_0 = ((ap_uint<39>)(u_0) * v_0); //<<0
+  #pragma HLS bind_op variable=mul_0 op=mul impl=dsp
+
+  ap_uint<21> mul_1 = ((ap_uint<21>)(u_0) * v_1); //<<27
+  #pragma HLS bind_op variable=mul_1 op=mul impl=dsp
+
+  
+  ap_uint<48> res = ( (((ap_uint<48>)mul_0)<<0) + (((ap_uint<48>)mul_1)<<27) );
+  return res;
+}
+
+ap_uint<48> WLM_mul_default_multiplier_36x12(ap_uint<36> u, ap_uint<12> v){
+  #pragma HLS inline
+
+  ap_uint<18> u_0 = u & ((1<<18)-1);
+  u = u >> 18;
+  ap_uint<18> u_1 = u & ((1<<18)-1);
+
+  ap_uint<12> v_0 = v & ((1<<12)-1);
+  
+  ap_uint<30> mul_0 = ((ap_uint<30>)(u_0) * v_0); //<<0
+  #pragma HLS bind_op variable=mul_0 op=mul impl=dsp
+  ap_uint<30> mul_1 = ((ap_uint<30>)(u_1) * v_0); //<<18
+  #pragma HLS bind_op variable=mul_1 op=mul impl=dsp
+
+  
+  ap_uint<48> res = ( (((ap_uint<48>)mul_0)<<0) + (((ap_uint<48>)mul_1)<<18) );
+  return res;
+}
+
+WORD wlm_as_custom(WORD u, WORD v, WORD q, WORD multiplier) 
+{
+  #pragma HLS inline
+  
+  DWORD product_uv;
+  product_uv = hardcoded_fullMul_48x48(u,v);
+
+  //==== Iteration 0 ====
+  DWORD t0_h = product_uv >> 36;
+  WLM_WORD t0_l = product_uv % (((WORD)1)<<36);
+
+  WLM_WORD t0_i = ((((WORD)1)<<36) - t0_l) % (((WORD)1)<<36);
+  
+  WLM_WORD carry_0 = t0_i.range(35,35) | t0_l.range(35,35);
+
+  DWORD t1 = t0_h + WLM_mul_default_multiplier_12x36(multiplier, t0_i) + carry_0;
+
+  //==== Iteration 1 ====
+  DWORD t1_h = t1 >> 12;
+  WLM_WORD t1_l = t1 % (((WORD)1)<<12);
+
+  WLM_WORD t1_i = ((((WORD)1)<<12) - t1_l) % (((WORD)1)<<12);
+  
+  WLM_WORD carry_1 = t1_i.range(11,11) | t1_l.range(11,11);
+  
+  WORD mod_multiplier = multiplier << (WLM_WORD_SIZE-12);
+
+  DWORD t2 = t1_h + WLM_mul_default_multiplier_36x12(mod_multiplier, t1_i) + carry_1;
+
+  DWORD t3 = t2-q;
+  WORD res;
+  if(t2<q){
+    res = t2;
+  }
+  else{
+    res = t3;
+  }
+
+  return (WORD)res;
+}
+// === END DEFS ===
+
+// === BEGIN CALL ===
+WORD reducedProduct = wlm_as_custom(right, tfVal, q, custom_multiplier);
+// === END CALL ===

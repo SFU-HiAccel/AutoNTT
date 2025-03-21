@@ -1,0 +1,62 @@
+// === BEGIN DEFS ===
+DWORD hardcoded_52x52(WORD u, WORD v){
+    #pragma HLS inline 
+
+    ap_uint<18> u_0 = u & ((1<<18)-1);
+    u = u >>18;
+    ap_uint<18> u_1 = u & ((1<<18)-1);
+    u = u >>18;
+    ap_uint<18> u_2 = u & ((1<<18)-1);
+
+    ap_uint<26> v_0 = v & ((1<<26)-1);
+    v = v >>26;
+    ap_uint<26> v_1 = v & ((1<<26)-1);
+    
+    ap_uint<45> mul_0 = ((ap_uint<45>)(u_0)*v_0);
+    #pragma HLS bind_op variable=mul_0 op=mul impl=dsp
+    ap_uint<45> mul_1 = ((ap_uint<45>)(u_1)*v_0);
+    #pragma HLS bind_op variable=mul_1 op=mul impl=dsp
+    ap_uint<45> mul_2 = ((ap_uint<45>)(u_2)*v_0);
+    #pragma HLS bind_op variable=mul_2 op=mul impl=dsp
+    ap_uint<45> mul_3 = ((ap_uint<45>)(u_0)*v_1);
+    #pragma HLS bind_op variable=mul_3 op=mul impl=dsp
+    ap_uint<45> mul_4 = ((ap_uint<45>)(u_1)*v_1); //27+18
+    #pragma HLS bind_op variable=mul_4 op=mul impl=dsp
+    ap_uint<45> mul_5 = ((ap_uint<45>)(u_2)*v_1); //27+36
+    #pragma HLS bind_op variable=mul_5 op=mul impl=dsp
+
+    DWORD res = ((DWORD)(mul_0) + (((DWORD)mul_1)<<18) + (((DWORD)mul_2)<<36) + (((DWORD)mul_3)<<26) + (((DWORD)mul_4)<<(44)) + (((DWORD)mul_5)<<(62)));
+    return res;
+}
+
+WORD custom_prime_reduction(WORD u, WORD v, WORD mod) {
+    #pragma HLS inline
+
+    DWORD u_v = hardcoded_52x52(u, v);
+
+    // Split x into high and low 52-bit parts
+    WORD high = (WORD)((DWORD)u_v >> (DWORD)52);
+    WORD low = u_v & (((WORD_PLUS1)1 << (WORD_PLUS1)52) - 1);  // Bottom bits
+
+    // Compute the modular reduction
+    u_v = ((DWORD)high << (DWORD)20) - high + low;  // high * (2^12 - 1) + low
+
+    if (u_v >= mod) {
+        high = (WORD)((DWORD)u_v >> (DWORD)52);
+        low = u_v & (((WORD_PLUS1)1 << (WORD_PLUS1)52) - 1);  // Bottom bits
+        u_v = ((DWORD)high << (DWORD)20) - high + low;  // high * (2^12 - 1) + low
+    }
+
+    if (u_v >= mod) {
+        high = (WORD)((DWORD)u_v >> (DWORD)52);
+        low = u_v & (((WORD_PLUS1)1 << (WORD_PLUS1)52) - 1);  // Bottom bits
+        u_v = ((DWORD)high << (DWORD)20) - high + low;  // high * (2^12 - 1) + low
+    }
+
+	return (WORD)u_v;
+}
+// === END DEFS ===
+
+// === BEGIN CALL ===
+WORD reducedProduct = custom_prime_reduction(right, tfVal, q);
+// === END CALL ===

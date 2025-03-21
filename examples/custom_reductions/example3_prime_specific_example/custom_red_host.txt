@@ -1,0 +1,22 @@
+// === BEGIN MOD_GEN DEFS ===
+void set_specific_prime(std::vector<WORD>& modulusArray, VAR_TYPE_32 limbCount){
+
+  WORD custom_prime = (WORD)(((WORD_PLUS1)1 << 52) - (1 << 20) + 1); //for specific prime reduction
+
+  VAR_TYPE_32 limbCounter = 0;
+  for(VAR_TYPE_32 i=0; i<limbCount; i++){
+    modulusArray[i] = custom_prime;
+  }
+
+}
+// === END MOD_GEN DEFS ===
+
+// === BEGIN REDUCTION DEFS ===
+// === END REDUCTION DEFS ===
+
+// === BEGIN MOD_GEN CALL ===
+set_specific_prime(workingModulus_arr, PARA_LIMBS);
+// === END MOD_GEN CALL ===
+
+// === BEGIN REDUCTION CALL ===
+// === END REDUCTION CALL ===

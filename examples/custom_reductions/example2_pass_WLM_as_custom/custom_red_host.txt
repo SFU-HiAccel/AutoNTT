@@ -1,0 +1,90 @@
+// === BEGIN MOD_GEN DEFS ===
+// === END MOD_GEN DEFS ===
+
+// === BEGIN REDUCTION DEFS ===
+
+void pre_computation_montgomery(WORD mod, uint8_t *shift_montgomery, WORD *r, WORD *r_inverse, WORD *k)
+{
+	if (mod < 3 || mod % 2 == 0) {
+    printf("[Error]::Modulus must be an odd number at least 3\n");
+    exit(1);
+  }
+
+	// reducer
+  *shift_montgomery = bit_length(mod);
+  WORD_PLUS1 r_tmp = ((WORD_PLUS1)1U)<<(*shift_montgomery);
+  *r_inverse = mod_inverse_pow2Num(*shift_montgomery, mod);
+    
+	// other precomputation
+	*k = (WORD)((DWORD)((DWORD)((DWORD)(r_tmp)*(DWORD)(*r_inverse % mod)) - (DWORD)1) / (DWORD)(mod));
+  *r = (WORD)((WORD_PLUS1)(r_tmp) - (WORD_PLUS1)(1));
+  
+  printf("\nMontgomery details:\n");
+  std::cout << "r = " << r_tmp << ", inverse of r = " << *r_inverse << std::endl;
+  std::cout << "k = " << *k << ", second r = " << *r << std::endl;
+}
+
+void custom_pre_computation_montgomery_array(std::vector<WORD>& workingModulus_arr, std::vector<VAR_TYPE_8>& shift_montgomery, std::vector<WORD>& r, std::vector<WORD>& r_inverse, std::vector<WORD>& k){
+  for(VAR_TYPE_32 paraLimbCounter=0; paraLimbCounter<PARA_LIMBS; paraLimbCounter++){
+    VAR_TYPE_8 shift_montgomery_val;
+    WORD r_val, r_inverse_val, k_val;
+    pre_computation_montgomery(workingModulus_arr[paraLimbCounter], &shift_montgomery_val, &r_val, &r_inverse_val, &k_val);
+    shift_montgomery[paraLimbCounter] = shift_montgomery_val;
+    r[paraLimbCounter] = r_val;
+    r_inverse[paraLimbCounter] = r_inverse_val;
+    k[paraLimbCounter] = k_val;
+  }
+}
+
+WORD convert_in(WORD x, uint8_t shift_montgomery, WORD modulus) {
+    return (WORD)((DWORD)((DWORD)(x) << (DWORD)(shift_montgomery)) % (DWORD)(modulus));  // return ((x << log2(r)) % modulus);
+}
+
+void convert_in_array(std::vector<WORD>& inp1, uint8_t shift_montgomery, WORD modulus) {
+  for(int i=0; i<N/2; i++){
+    inp1[i] = convert_in(inp1[i], shift_montgomery, modulus);
+  }
+}
+
+void custom_convert_tfs_in_limbs_array_to_montgomery_form(std::vector<WORD> (&inVec)[PARA_LIMBS], std::vector<VAR_TYPE_8>& shift_montgomery, std::vector<WORD>& workingModulus_arr){
+  for(VAR_TYPE_32 paraLimbCounter=0; paraLimbCounter<PARA_LIMBS; paraLimbCounter++){
+    VAR_TYPE_32 size = inVec[paraLimbCounter].size();
+    convert_in_array(inVec[paraLimbCounter], shift_montgomery[paraLimbCounter], workingModulus_arr[paraLimbCounter]);
+  }
+}
+
+WORD WLM_find_multiplier(WORD mod){
+  if((mod-1)%(((WORD_PLUS1)1)<<WLM_WORD_SIZE)!=0){
+    std::cout << "[ERROR]:: The modulus " << mod << " can not be divided by WLM word size " << WLM_WORD_SIZE << std::endl;
+    exit(1);
+  }
+  WORD multiplier = (mod-1)/(((WORD_PLUS1)1)<<WLM_WORD_SIZE);
+  return multiplier;
+}
+
+void custom_WLM_find_multiplier_arr(std::vector<WORD>& workingModulus_arr, std::vector<WLM_MULTIPLIER_WORD>& multiplier_arr){
+  for(VAR_TYPE_32 paraLimbCounter=0; paraLimbCounter<PARA_LIMBS; paraLimbCounter++){
+    multiplier_arr[paraLimbCounter] = WLM_find_multiplier(workingModulus_arr[paraLimbCounter]);
+    std::cout << "WLM multiplier[" << paraLimbCounter << "] = " << multiplier_arr[paraLimbCounter] << std::endl;
+  }
+}
+
+// === END REDUCTION DEFS ===
+
+// === BEGIN MOD_GEN CALL ===
+// === END MOD_GEN CALL ===
+
+// === BEGIN REDUCTION CALL ===
+
+  vector<VAR_TYPE_8> shift_montgomery(PARA_LIMBS);
+  vector<WORD> r(PARA_LIMBS);
+  vector<WORD> r_inverse(PARA_LIMBS);
+  vector<WORD> k(PARA_LIMBS);
+  custom_pre_computation_montgomery_array(workingModulus_arr, shift_montgomery, r, r_inverse, k);
+  vector<WLM_MULTIPLIER_WORD> custom_multiplier(PARA_LIMBS);
+  custom_WLM_find_multiplier_arr(workingModulus_arr, custom_multiplier);
+  
+  custom_convert_tfs_in_limbs_array_to_montgomery_form(tfArr, shift_montgomery, workingModulus_arr);
+  custom_convert_tfs_in_limbs_array_to_montgomery_form(inv_tfArr, shift_montgomery, workingModulus_arr);
+
+// === END REDUCTION CALL ===
