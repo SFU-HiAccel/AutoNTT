@@ -84,7 +84,10 @@ Optional Inputs:
 
 - `--latency_target`: Specifies a latency target (in milliseconds) for the design space exploration (DSE).
 - `--throughput_target`: Specifies a throughput target (in NTTs per second) for the design space exploration (DSE).
-- `--arch_type`: Restricts the design space exploration to specific architecture(s).
+- `--arch_type`: Restricts the design space exploration to specific architecture(s). Supported architectures:
+  - `I` = Iterative
+  - `D` = Dataflow
+  - `H` = Hybrid
 - `--parallel_limbs`: Requests the generation of designs supporting the specified number of parallel limbs.  
 - `--modmul_type`: Specifies the modulo reduction method. Supported values:
   - `B` = Barrett (default)  
