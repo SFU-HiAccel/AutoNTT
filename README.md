@@ -39,7 +39,7 @@ Descriptions of important inputs are provided below.
 
 Tool output:
 
-Upon a successful run, the generated design code will be written to the following directory: `tool_outputs/<design_name>/`
+Upon a successful run, the generated design code will be written to the following directory: `tool_outputs/<design_name>/`. `design_name` includes the architecture name and configurations of the output design.
 
 ### Build the design and run
 
