@@ -2,7 +2,7 @@
 
 **Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs**
 
-AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration, code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967)
+AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967)
 
 <div align="center">
   <img src="DSE_flowchart.png" alt="Diagram" width="400"/>
@@ -83,9 +83,9 @@ Mandatory Inputs:
 
 Optional Inputs:
 
-- `--latency_target`: Specifies a latency target (in milliseconds) for the design space exploration (DSE).
-- `--throughput_target`: Specifies a throughput target (in NTTs per second) for the design space exploration (DSE).
-- `--arch_type`: Restricts the design space exploration to specific architecture(s). Supported architectures:
+- `--latency_target`: Specifies a latency target (in milliseconds) for the DSE.
+- `--throughput_target`: Specifies a throughput target (in NTTs per second) for the DSE.
+- `--arch_type`: Restricts the DSE to specific architecture(s). Supported architectures:
   - `I` = Iterative
   - `D` = Dataflow
   - `H` = Hybrid
