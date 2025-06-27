@@ -2,7 +2,7 @@
 
 **Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs**
 
-AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration, code generation using HLS, and integration with FPGA toolchains.
+AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration, code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967)
 
 ---
 
