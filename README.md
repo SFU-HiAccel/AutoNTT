@@ -32,7 +32,8 @@ These tools are **not required** for design space exploration (DSE) and code gen
 Example command with mandatory inputs:
 
 ```bash
-cd automation_framework
+git clone https://github.com/SFU-HiAccel/AutoNTT.git
+cd AutoNTT/automation_framework
 python3 AutoNTT.py --poly_size 4096 --mod_size 48 --resources fpga_resources.json
 ```
 Descriptions of important inputs are provided below.
