@@ -59,15 +59,16 @@ def validate_resource_json(file_path):
     return data  # Return parsed JSON if needed, or file_path if you want to re-read later
 
 def validate_platform_file(parser, input_args):
-    # If custom reduction algorithm is used, a valid platform file is a must
-    if input_args.custom_mod_kernel:
-        if not(input_args.platform):
-            parser.error("[ERROR] A platform file must be provided to support custom reduction")
-    
+    default="xilinx_u280_gen3x16_xdma_1_202211_1"
+
+    if not(input_args.platform):
+        input_args.platform = default
+        logging.getLogger("validate_platform_file").info(f"A platform file is not provided. Defaulting to {default}")
+
     # Chcek if the platform file is available
     platform_path = os.path.join("/opt/xilinx/platforms", input_args.platform)
     if not os.path.exists(platform_path):
-        parser.error(f"[ERROR] Platform '{input_args.platform}' not found at: {platform_path}")
+        raise parser.error(f"[ERROR] Platform '{input_args.platform}' not found at: {platform_path}")
 
 # Validate arch input
 def validate_arch_type(value):
@@ -357,13 +358,12 @@ def get_user_inputs(DSEParamsVar):
     # === Mandatory Arguments ===
     # Group: Algo parameters
     algo_group = parser.add_argument_group("Mandatory: FHE parameters")
-    algo_group.add_argument("--poly_size", "-N", required=True, dest="N", type=validate_N, action="store", help="Specify the polynomial size (must be power of 2 between 2^10-2^18)")
-    algo_group.add_argument("--mod_size", "-log_q", required=True, dest="log_q", type=validate_log_q, action="store", help="Specify the bit length of modulus (must be a positive number less than or equal to 64)")
+    algo_group.add_argument("--poly_size", "-N", required=True, dest="N", type=validate_N, action="store", help="Specify the polynomial size (must be power of 2 and extensively tested for N = 2^10-2^18)")
+    algo_group.add_argument("--mod_size", "-log_q", required=True, dest="log_q", type=validate_log_q, action="store", help="Specify the bit length of modulus (must be a positive number less than or equal to 64 and extensively tested for log_q = 28-64)")
 
     # Group: Device parameters
     device_group = parser.add_argument_group("Mandatory: FPGA Device parameters")
     device_group.add_argument("--resources", "-r", required=True, dest="resource_json", type=validate_resource_json, action="store", help="Provide device resources in a JSON file")
-    device_group.add_argument("--platform", "-p", required=False, dest="platform", type=str, action="store", help="Pass the target platform", default="xilinx_u280_gen3x16_xdma_1_202211_1")
 
     # === Optional Arguments ===
     # Group: Performance parameters
@@ -373,25 +373,26 @@ def get_user_inputs(DSEParamsVar):
 
     # Group: Architecture specific
     arch_group = parser.add_argument_group("Optional: Architecture specific")
-    arch_group.add_argument("--arch_type", "-a", required=False, dest="arch", type=validate_arch_type, action="store", help="Specify a target architecture types if needed. Architecture types: I=Iterative, D=Dataflow, H=Hybrid", default="IDH")
+    arch_group.add_argument("--arch_type", "-a", required=False, dest="arch", type=validate_arch_type, action="store", help="Specify a target architecture types if needed. Architecture types: I=Iterative, D=Dataflow, H=Hybrid and any combination of these are accepted. Default = IDH", default="IDH")
 
     # Group: Parallel limbs
     perf_group = parser.add_argument_group("Optional: Parallel limbs")
-    perf_group.add_argument("--parallel_limbs", "-pl", required=False, dest="num_parallel_limbs", type=validate_parallel_limbs, action="store", help="Specify number of parallel limbs in the design", default=1)
+    perf_group.add_argument("--parallel_limbs", "-pl", required=False, dest="num_parallel_limbs", type=validate_parallel_limbs, action="store", help="Specify number of parallel limbs in the design. Default = 1", default=1)
 
     # Group: Modulo multiplication specific
     modmul_group = parser.add_argument_group("Optional: Modulo multiplication specific")
-    modmul_group.add_argument("--modmul_type", "-mm", required=False, dest="modmul_type", type=str, action="store", choices=["B", "M", "WLM", "C", "N"], help="Modulo multiplication methods: B=Barrett, M=Montgomery, WLM=Word Level Montgomery, N=Naive, C=Custom", default="B")
-    modmul_group.add_argument("--wlm_word_size", "-wlm_ws", required=False, dest="WLM_word_size", type=int, action="store", help="Specify Word Level Montgomery word size.")
+    modmul_group.add_argument("--modmul_type", "-mm", required=False, dest="modmul_type", type=str, action="store", choices=["B", "M", "WLM", "C", "N"], help="Modulo multiplication methods: B=Barrett, M=Montgomery, WLM=Word Level Montgomery, N=Naive, C=Custom. Default = B", default="B")
+    modmul_group.add_argument("--wlm_word_size", "-wlm_ws", required=False, dest="WLM_word_size", type=int, action="store", help="Specify Word Level Montgomery word size. Default = log_q/2")
     modmul_group.add_argument("--custom_mod_kernel", "-cm_kernel", required=False, dest="custom_mod_kernel", type=str, action="store", help="Pass the kernel code content of the custom modulo reduction")
     modmul_group.add_argument("--custom_mod_host", "-cm_host", required=False, dest="custom_mod_host", type=str, action="store", help="Pass the host code content of the custom modulo reduction")
     modmul_group.add_argument("--custom_mod_header", "-cm_header", required=False, dest="custom_mod_header", type=str, action="store", help="Pass the header file content of the custom modulo reduction")
     modmul_group.add_argument("--custom_mod_interface", "-cm_interface", required=False, dest="custom_mod_interface", type=str, action="store", help="Pass the interface variable definitions")
 
     # Group: DRAM parameter overwrite
-    dram_param_group = parser.add_argument_group("Optional: DRAM parameters")
-    dram_param_group.add_argument("--dram_port_bw", "-p_bw", required=False, dest="dram_port_bw", type=float, action="store", help="Specify BW per DRAM port. Defaults: HBM = 13.18GB/s, DDR = 13.73GB/s")
-    dram_param_group.add_argument("--dram_port_width", "-p_w", required=False, dest="dram_port_width", type=validate_dram_port_width, action="store", help=f"Specify DRAM port width in terms of bits. Defaults = {DEFAULT_DRAM_PORT_WIDTH}", default=DEFAULT_DRAM_PORT_WIDTH)
+    platform_param_group = parser.add_argument_group("Optional: Platform info parameters")
+    platform_param_group.add_argument("--platform", "-p", required=False, dest="platform", type=str, action="store", help="Pass the target platform. Default = xilinx_u280_gen3x16_xdma_1_202211_1")
+    platform_param_group.add_argument("--dram_port_bw", "-p_bw", required=False, dest="dram_port_bw", type=float, action="store", help="Specify BW per DRAM port. Defaults: HBM = 13.18GB/s, DDR = 13.73GB/s")
+    platform_param_group.add_argument("--dram_port_width", "-p_w", required=False, dest="dram_port_width", type=validate_dram_port_width, action="store", help=f"Specify DRAM port width in terms of bits. Default = {DEFAULT_DRAM_PORT_WIDTH}", default=DEFAULT_DRAM_PORT_WIDTH)
     
 
     # Group: Misc parameters
