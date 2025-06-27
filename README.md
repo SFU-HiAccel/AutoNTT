@@ -13,7 +13,7 @@ AutoNTT is a design automation framework for generating and exploring efficient 
 ## System Requirements
 
 - **Python 3**: AutoNTT has been extensively tested with Python 3.6.9.
-- **[TAPA](https://github.com/UCLA-VAST/tapa)/[Pasta](https://github.com/SFU-HiAccel/pasta)**: AutoNTT designs are developed using the TAPA framework for task-parallel programming. Users can either [install TAPA](https://github.com/UCLA-VAST/tapa?tab=readme-ov-file#:~:text=Documentation-,Installation,-Hello%20World) or [install Pasta](https://github.com/SFU-HiAccel/pasta#installation), which is an extension of TAPA. AutoNTT has been extensively tested with TAPA version 0.0.20240104.2.
+- **[TAPA](https://github.com/UCLA-VAST/tapa)/[Pasta](https://github.com/SFU-HiAccel/pasta)**: AutoNTT designs are developed using the TAPA framework for task-parallel programming. Users can either [install TAPA](https://tapa.readthedocs.io/en/main/user/installation.html) or [install Pasta](https://github.com/SFU-HiAccel/pasta#installation), which is an extension of TAPA. AutoNTT has been extensively tested with TAPA version 0.0.20240104.2.
 - **AMD/Xilinx Tools**: TAPA relies on AMD/Xilinx Vitis and Vivado. AutoNTT has been tested with Vitis and Vivado version 2023.2.
 
 **Note**: TAPA/Pasta, Vitis, and Vivado are **only required** when:
