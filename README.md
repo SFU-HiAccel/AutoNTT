@@ -99,7 +99,7 @@ Optional Inputs:
 - `--wlm_word_size`: Specifies the word size for Word-Level Montgomery (WLM). This affects resource usage and latency of the WLM modulo reduction.  
 - `--custom_mod_kernel`, `--custom_mod_host`, `--custom_mod_header`, `--custom_mod_interface`:  
   Provide the corresponding custom modulo reduction components when using `--modmul_type C`.  
-  Please refer to the documentation here for details on how to use these switches.  
+  Please refer to the documentation [here](https://github.com/SFU-HiAccel/AutoNTT/tree/main/examples/modmul_types/custom_reductions) for details on how to use these switches.  
 - `--verbose`: Increases verbosity level for debugging purposes.
 
 ---
