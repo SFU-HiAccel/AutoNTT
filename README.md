@@ -19,6 +19,7 @@ AutoNTT is a design automation framework for generating and exploring efficient 
 **Note**: TAPA/Pasta, Vitis, and Vivado are **only required** when:
 1. A custom reduction method is passed to the automation framework.
 2. You plan to build and run the generated hardware design.
+
 These tools are **not required** for design space exploration (DSE) and code generation using default reduction methods.
 
 ---
