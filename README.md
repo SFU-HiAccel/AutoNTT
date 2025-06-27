@@ -5,7 +5,8 @@
 AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967)
 
 <div align="center">
-  <img src="DSE_flowchart.png" alt="Diagram" width="400"/>
+  <img src="images/DSE_flowchart.png" alt="Diagram" width="400"/><br>
+  <sub><b>AutoNTT Design Automation Flow</b></sub>
 </div>
 
 ---
