@@ -187,4 +187,4 @@ vector<ap_uint<35>> arg2(PARA_LIMBS);
 
 ## Debug
 
-If you encounter issues while enabling custom reduction methods, consider using --verbose 2 to enable full trace logging and help identify the problem.
+If you encounter issues while enabling custom reduction methods, consider using `--verbose 2` to enable full trace logging and help identify the problem.
