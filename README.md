@@ -23,29 +23,12 @@ These tools are **not required** for design space exploration (DSE) and code gen
 
 ### DSE and code generation
 
-To view all available command-line options:
-
-```bash
-python3 AutoNTT.py --help
-```
-
 Example command with mandatory inputs:
 
 ```bash
 python3 AutoNTT.py --poly_size 4096 --mod_size 48 --resources fpga_resources.json
 ```
-
-Mandatory inputs:
-
-- `--poly_size N`: Specifies the target polynomial size
-
-- `--mod_size log_q` : Specifies the modulus (i.e., prime) bit-width
-
-- `--resources RESOURCE_JSON` : Specifies the target device resources (see the provided `fpga_resources.json` as a template)
-
-Optional inputs:
-
-A detailed description of all supported optional inputs is provided below.
+Descriptions of important inputs are provided below.
 
 Tool output:
 
@@ -75,3 +58,44 @@ Run design on FPGA:
 ```bash
 make run_hw
 ```
+
+---
+
+## Important Inputs
+
+To view all available command-line options:
+
+```bash
+python3 AutoNTT.py --help
+```
+
+Mandatory Inputs:
+
+- `--poly_size`: Specifies the target polynomial size **N**.  
+- `--mod_size`: Specifies the modulus (i.e., prime) bit-width **log_q**.  
+- `--resources`: Specifies the target device resources (see the provided `fpga_resources.json` as a template).  
+
+Optional Inputs:
+
+- `--latency_target`: Specifies a latency target (in milliseconds) for the design space exploration (DSE).
+- `--throughput_target`: Specifies a throughput target (in NTTs per second) for the design space exploration (DSE).
+- `--arch_type`: Restricts the design space exploration to specific architecture(s).
+- `--parallel_limbs`: Requests the generation of designs supporting the specified number of parallel limbs.  
+- `--modmul_type`: Specifies the modulo reduction method. Supported values:
+  - `B` = Barrett (default)  
+  - `M` = Montgomery  
+  - `WLM` = Word-Level Montgomery  
+  - `N` = Naive  
+  - `C` = Custom  
+- `--wlm_word_size`: Specifies the word size for Word-Level Montgomery (WLM). This affects resource usage and latency of the WLM modulo reduction.  
+- `--custom_mod_kernel`, `--custom_mod_host`, `--custom_mod_header`, `--custom_mod_interface`:  
+  Provide the corresponding custom modulo reduction components when using `--modmul_type C`.  
+  Please refer to the documentation here for details on how to use these switches.  
+- `--verbose`: Increases verbosity level for debugging purposes.
+
+---
+
+## Publication
+
+AutoNTT work has been published at FCCM 2025.
+>D. Kumarathunga, Q. Hu and Z. Fang, "AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs," 2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM), Fayetteville, AR, USA, 2025, pp. 1-9, doi: 10.1109/FCCM62733.2025.00024.
