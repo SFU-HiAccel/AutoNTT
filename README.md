@@ -78,8 +78,8 @@ python3 AutoNTT.py --help
 
 Mandatory Inputs:
 
-- `--poly_size`: Specifies the target polynomial size **N**.  
-- `--mod_size`: Specifies the modulus (i.e., prime) bit-width **log_q**.  
+- `--poly_size`: Specifies the target polynomial size.  
+- `--mod_size`: Specifies the modulus (i.e., prime) bit-width.  
 - `--resources`: Specifies the target device resources (see the provided `fpga_resources.json` as a template).  
 
 Optional Inputs:
