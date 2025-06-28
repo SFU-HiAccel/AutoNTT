@@ -2,7 +2,16 @@
 
 **Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs**
 
-AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT). It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967)
+AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT), targeting Fully Homomorphic Encryption (FHE) and Post-Quantum Cryptography (PQC) applications. It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967). 
+
+AutoNTT supports a range of FHE/PQC parameters, modulo reduction methods, and NTT architectures, and generates output designs in HLS.
+
+**FHE/PQC parameters:** Polynomial sizes $2^{10}$ – $2^{18}$, Modulo sizes $24 - 64$ bits
+
+**Modulo reduction methods:** Barrett, Montgomery, Word Level Montgomery, Naive, Custom
+
+**NTT Architectures:** Iterative, Dataflow, Hybrid
+
 
 <div align="center">
   <img src="images/DSE_flowchart.png" alt="Diagram" width="400"/><br>
@@ -73,8 +82,8 @@ python3 AutoNTT.py --help
 
 Mandatory Inputs:
 
-- `--poly_size`: Specifies the target polynomial size.  
-- `--mod_size`: Specifies the modulus (i.e., prime) bit-width.  
+- `--poly_size`: Specifies the target polynomial size. Supported range: ($2^{10}$ – $2^{18}$).  
+- `--mod_size`: Specifies the modulus (i.e., prime) bit-width. Supported range: $(24 - 64)$.  
 - `--resources`: Specifies the target device resources (see the provided `fpga_resources.json` as a template).  
 
 Optional Inputs:
@@ -96,7 +105,7 @@ Optional Inputs:
 - `--custom_mod_kernel`, `--custom_mod_host`, `--custom_mod_header`, `--custom_mod_interface`:  
   Provide the corresponding custom modulo reduction components when using `--modmul_type C`.  
   Please refer to the documentation [here](https://github.com/SFU-HiAccel/AutoNTT/tree/main/examples/modmul_types/custom_reductions) for details on how to use these switches.  
-- `--verbose`: Increases verbosity level for debugging purposes.
+- `--verbose`: Increases verbosity level for debugging purposes. Supported levels: $0,1,2$
 
 ---
 
@@ -123,4 +132,4 @@ BibTex:
 
 ## Contact
 
-If you have any questions or are interested in collaboration, please feel free to contact me at dilshan_kumarathunga@sfu.ca or disakugen@gmail.com.
+If you have any questions or are interested in collaboration, please feel free to contact me at _dilshan_kumarathunga [at] sfu [dot] ca_ or _disakugen [at] gmail [dot] com_. You can also feel free to file issues in the repository.
