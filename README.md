@@ -14,14 +14,8 @@ AutoNTT is a design automation framework for generating and exploring efficient 
 ## System Requirements
 
 - **Python 3**: AutoNTT has been extensively tested with Python 3.6.9.
-- **[TAPA](https://github.com/UCLA-VAST/tapa)/[Pasta](https://github.com/SFU-HiAccel/pasta)**: AutoNTT designs are developed using the TAPA framework for task-parallel programming. Users can either [install TAPA](https://tapa.readthedocs.io/en/main/user/installation.html) or [install Pasta](https://github.com/SFU-HiAccel/pasta#installation), which is an extension of TAPA. AutoNTT has been extensively tested with TAPA version 0.0.20240104.2.
+- **[TAPA](https://github.com/UCLA-VAST/tapa)/[Pasta](https://github.com/SFU-HiAccel/pasta)**: AutoNTT designs are developed using the TAPA framework for task-parallel programming. Users can either [install TAPA](https://tapa.readthedocs.io/en/main/user/installation.html) or [install Pasta](https://github.com/SFU-HiAccel/pasta#installation), which is an extension of TAPA. AutoNTT has been extensively tested with Pasta version 0.0.20240104.2.
 - **AMD/Xilinx Tools**: TAPA relies on AMD/Xilinx Vitis and Vivado. AutoNTT has been tested with Vitis and Vivado version 2023.2.
-
-**Note**: TAPA/Pasta, Vitis, and Vivado are **only required** when:
-1. A custom reduction method is passed to the automation framework.
-2. You plan to build and run the generated HLS design.
-
-These tools are **not required** for design space exploration (DSE) and code generation using default reduction methods.
 
 ---
 
@@ -108,5 +102,25 @@ Optional Inputs:
 
 ## Publication
 
-AutoNTT work has been published at FCCM 2025 **(Best Paper Nominee)**.
->D. Kumarathunga, Q. Hu and Z. Fang, "AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs," 2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM), Fayetteville, AR, USA, 2025, pp. 1-9, doi: 10.1109/FCCM62733.2025.00024.
+AutoNTT work has been published at FCCM 2025 **(Best Paper Nominee)**. If you use **AutoNTT** or find our work helpful in your research, please consider citing our work. The citation is as follows:
+
+Plain text:
+> D. Kumarathunga, Q. Hu and Z. Fang, "AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs," 2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM), Fayetteville, AR, USA, 2025, pp. 1-9, doi: 10.1109/FCCM62733.2025.00024.
+
+BibTex:
+```
+>@INPROCEEDINGS{11008967,
+  author={Kumarathunga, Dilshan and Hu, Qilin and Fang, Zhenman},
+  booktitle={2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM)}, 
+  title={AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-9},
+  keywords={Scalability;Computer architecture;Transforms;Throughput;Polynomials;Iterative algorithms;Space exploration;Resource management;Field programmable gate arrays;Optimization;number theoretic transform;fully homomorphic encryption;fpga acceleration;design automation;design space exploration},
+  doi={10.1109/FCCM62733.2025.00024}}
+```
+
+## Contact
+
+If you have any questions or are interested in collaboration, please feel free to contact me at dilshan_kumarathunga@sfu.ca or disakugen@gmail.com.
