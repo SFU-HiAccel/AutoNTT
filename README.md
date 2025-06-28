@@ -118,7 +118,7 @@ Plain text:
 
 BibTex:
 ```
->@INPROCEEDINGS{11008967,
+>@INPROCEEDINGS{AutoNTT-FCCM2025,
   author={Kumarathunga, Dilshan and Hu, Qilin and Fang, Zhenman},
   booktitle={2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM)}, 
   title={AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs}, 
