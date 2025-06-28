@@ -31,7 +31,10 @@ def gen_BU(designParamsVar):
     line += "  int i=0;" + "\n"
 
     if(designParamsVar.DOUBLE_BUF_EN):
-        line += "  VAR_TYPE_32 numBUIter = ((N*logN)/(2*NUM_BU)) * (iter+2);" + "\n"
+        line += "  VAR_TYPE_32 double_buf_iter = (iter+2);" + "\n"
+        line += "  #pragma HLS bind_op variable=double_buf_iter op=add impl=fabric" + "\n"
+        line += "  VAR_TYPE_32 numBUIter = ((N*logN)/(2*NUM_BU)) * double_buf_iter;" + "\n"
+        line += "  #pragma HLS bind_op variable=numBUIter op=mul impl=fabric" + "\n"
     else:
         line += "  VAR_TYPE_32 numBUIter = ((N*logN)/(2*NUM_BU)) * iter;" + "\n"
 
