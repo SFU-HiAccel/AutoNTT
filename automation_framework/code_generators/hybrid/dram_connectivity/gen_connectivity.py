@@ -9,10 +9,7 @@ def gen_ntt_connectivity_code(designParamsVar):
 
     DRAM_TYPE = designParamsVar.DRAM_TYPE
 
-    if(DRAM_TYPE==HBM):
-        port_name = "HBM"
-    else:
-        port_name = "DDR"
+    port_name = DRAM_TYPE
 
     line = ""
 
