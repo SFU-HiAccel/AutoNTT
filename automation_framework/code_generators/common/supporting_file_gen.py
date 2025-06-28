@@ -49,7 +49,7 @@ def gen_Makefile(bestArchConfigVar):
 	content += "	make csim_run" + "\n"
 	content += "" + "\n"
 
-	content += "tapa_wo_autobridge:" + "\n"
+	content += "tapa_wo_floorplan:" + "\n"
 	content += "	tapac -o NTT_kernel.$(platform).hw.xo ntt_kernel.cpp \\" + "\n"
 	content += "	--platform $(platform) \\" + "\n"
 	content += "	--top NTT_kernel \\" + "\n"
@@ -73,7 +73,7 @@ def gen_Makefile(bestArchConfigVar):
 	content += "	--work-dir NTT_kernel.$(platform).hw.xo.tapa" + "\n"
 	content += "" + "\n"
 
-	content += "tapa_wi_autobridge:" + "\n"
+	content += "tapa_wi_floorplan:" + "\n"
 	content += "	tapac -o NTT_kernel.$(platform).hw.xo ntt_kernel.cpp \\" + "\n"
 	content += "	--platform $(platform) \\" + "\n"
 	content += "	--top NTT_kernel \\" + "\n"
@@ -98,7 +98,8 @@ def gen_Makefile(bestArchConfigVar):
 	content += "	--min-area-limit 0 \\" + "\n"
 	content += "	--floorplan-output constraint.tcl \\" + "\n"
 	content += "	--enable-synth-util \\" + "\n"
-	content += "	--enable-hbm-binding-adjustment \\" + "\n"
+	if(("u280" in PLATFORM_FILE) or ("u50" in PLATFORM_FILE)): # TAPA only support HBM binding with U280 and U50. Not U200
+		content += "	--enable-hbm-binding-adjustment \\" + "\n"
 	content += "	--max-parallel-synth-jobs $(MAX_SYNTH_JOBS) \\" + "\n"
 	content += "	--max-search-time $(MAX_SERCH_TIME) \\" + "\n"
 	content += "	--work-dir NTT_kernel.$(platform).hw.xo.tapa" + "\n"
