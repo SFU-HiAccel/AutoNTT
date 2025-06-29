@@ -82,8 +82,8 @@ python3 AutoNTT.py --help
 
 Mandatory Inputs:
 
-- `--poly_size`: Specifies the target polynomial size. Supported range: ($2^{10}$ – $2^{18}$).  
-- `--mod_size`: Specifies the modulus (i.e., prime) bit-width. Supported range: $(24 - 64)$.  
+- `--poly_size`: Specifies the target polynomial size. Supported range: $2^{10}$ – $2^{18}$.  
+- `--mod_size`: Specifies the modulus (i.e., prime) bit-width. Supported range: $24 - 64$ bits.  
 - `--resources`: Specifies the target device resources (see the provided `fpga_resources.json` as a template).  
 
 Optional Inputs:
@@ -105,7 +105,7 @@ Optional Inputs:
 - `--custom_mod_kernel`, `--custom_mod_host`, `--custom_mod_header`, `--custom_mod_interface`:  
   Provide the corresponding custom modulo reduction components when using `--modmul_type C`.  
   Please refer to the documentation [here](https://github.com/SFU-HiAccel/AutoNTT/tree/main/examples/modmul_types/custom_reductions) for details on how to use these switches.  
-- `--verbose`: Increases verbosity level for debugging purposes. Supported levels: $0,1,2$
+- `--verbose`: Increases verbosity level for debugging purposes. Supported levels: $0,1,2$.
 
 ---
 
