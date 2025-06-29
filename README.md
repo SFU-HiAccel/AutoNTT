@@ -111,7 +111,7 @@ Optional Inputs:
 
 ## Publication
 
-AutoNTT work has been published at FCCM 2025 **(Best Paper Nominee)**. If you use **AutoNTT** or find our work helpful in your research, please consider citing our work. The citation is as follows:
+AutoNTT work has been published at FCCM 2025 **(Best Paper Nominee)**. If you use AutoNTT or find our work helpful in your research, please consider citing our work. The citation is as follows:
 
 Plain text:
 > D. Kumarathunga, Q. Hu and Z. Fang, "AutoNTT: Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs," 2025 IEEE 33rd Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM), Fayetteville, AR, USA, 2025, pp. 1-9, doi: 10.1109/FCCM62733.2025.00024.
