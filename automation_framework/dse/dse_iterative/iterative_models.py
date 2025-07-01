@@ -312,7 +312,10 @@ def calc_BRAM_utilization_for_poly(iterativeConfigsVar):
 
     poly_values_per_buf = POLY_SIZE//num_of_poly_buffers
 
-    BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(poly_values_per_buf/BRAM_DEPTH)
+    if(poly_values_per_buf < (BRAM_DEPTH//2)): # BRAM 18k can work as 36bitx512
+        BRAMs_per_buffer = math.ceil(WORD_SIZE/(2*BRAM_WIDTH)) * math.ceil(poly_values_per_buf/(BRAM_DEPTH//2))
+    else:
+        BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(poly_values_per_buf/BRAM_DEPTH)
 
     total_BRAMs = 0
 
