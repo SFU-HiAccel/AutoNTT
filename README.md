@@ -2,7 +2,7 @@
 
 **Automatic Architecture Design and Exploration for Number Theoretic Transform Acceleration on FPGAs**
 
-AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT), targeting Fully Homomorphic Encryption (FHE) and Post-Quantum Cryptography (PQC) applications. It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://ieeexplore.ieee.org/document/11008967). 
+AutoNTT is a design automation framework for generating and exploring efficient FPGA architectures for the Number Theoretic Transform (NTT), targeting Fully Homomorphic Encryption (FHE) and Post-Quantum Cryptography (PQC) applications. It enables automatic design space exploration (DSE), code generation using HLS, and integration with FPGA toolchains. [Paper](https://www.sfu.ca/~zhenman/files/C45-FCCM2025-AutoNTT.pdf). 
 
 AutoNTT supports a range of FHE/PQC parameters, modulo reduction methods, and NTT architectures, and generates output designs in HLS.
 
