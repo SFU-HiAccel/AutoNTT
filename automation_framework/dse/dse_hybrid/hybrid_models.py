@@ -413,7 +413,10 @@ def calc_BRAM_utilization_for_poly(hybridConfigsVar):
 
     poly_values_per_shuffler_buf = (POLY_SIZE/V_TOTAL_DATA)*2
 
-    BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(poly_values_per_shuffler_buf/BRAM_DEPTH)
+    if(poly_values_per_shuffler_buf < (BRAM_DEPTH//2)): # BRAM 18k can work as 36bitx512
+        BRAMs_per_buffer = math.ceil(WORD_SIZE/(2*BRAM_WIDTH)) * math.ceil(poly_values_per_shuffler_buf/(BRAM_DEPTH//2))
+    else:
+        BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(poly_values_per_shuffler_buf/BRAM_DEPTH)
     
     total_brams_for_shuffler_buffers = BRAMs_per_buffer * num_of_shuffler_buffers
 

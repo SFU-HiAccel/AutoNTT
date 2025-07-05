@@ -329,7 +329,10 @@ def calc_BRAM_utilization_for_poly(dataflowConfigsVar):
 
     for shuff_idx in range(num_shufflers):
         buffer_depth = shuf_buf_depth_arr[shuff_idx]
-        BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(buffer_depth/BRAM_DEPTH)
+        if(buffer_depth < (BRAM_DEPTH//2)): # BRAM 18k can work as 36bitx512
+            BRAMs_per_buffer = math.ceil(WORD_SIZE/(2*BRAM_WIDTH)) * math.ceil(buffer_depth/(BRAM_DEPTH//2))
+        else:    
+            BRAMs_per_buffer = math.ceil(WORD_SIZE/BRAM_WIDTH) * math.ceil(buffer_depth/BRAM_DEPTH)
         total_brams_for_shuffler_buffers = BRAMs_per_buffer * num_of_shuffler_buffers
         total_BRAMs += total_brams_for_shuffler_buffers
     

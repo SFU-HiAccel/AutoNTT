@@ -97,6 +97,8 @@ def select_best_design(iterativeConfigsVar, dataflowConfigsVar, hybridConfigsVar
     # Use min() with a key to compare based on EXPECTED_LATENCY_MS
     best_config = min(candidates, key=lambda config: config.EXPECTED_LATENCY_MS)
 
-    logging.getLogger("select_best_design").info(f"Selected the best option as AutoNTT-{best_config.ARCH_IDENTITY}. Latency = {best_config.EXPECTED_LATENCY_MS} ms, Throughput = {best_config.EXPECTED_THROUGHPUT} NTT/s")
+    logging.getLogger("select_best_design").info(f"Selected the best option as AutoNTT-{best_config.ARCH_IDENTITY}.")
+    logging.getLogger("select_best_design").info(f"Estimated performance of the selected design: Latency = {best_config.EXPECTED_LATENCY_MS} ms, Throughput = {best_config.EXPECTED_THROUGHPUT} NTT/s")
+    logging.getLogger("select_best_design").info(f"Estimated resources of the selected design: LUT = {best_config.DESIGN_RESOURCES['LUT']}, FF = {best_config.DESIGN_RESOURCES['FF']}, DSP = {best_config.DESIGN_RESOURCES['DSP']}, BRAM = {best_config.DESIGN_RESOURCES['BRAM']}, URAM = {best_config.DESIGN_RESOURCES['URAM']}, DRAM Ports = {best_config.DESIGN_RESOURCES['offchip_ports']}")
 
     return best_config
