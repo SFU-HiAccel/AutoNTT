@@ -70,6 +70,8 @@ const VAR_TYPE_32 TF_PORT_SIZE={(CONCAT_FACTOR>>1) // tf_mmap_count};
 const VAR_TYPE_32 DB_TF_PORT_NUM={multi_ports_tf_mmap_count};
 
 """
+# LEN_{idx} determines how many ports are assigned to input the TF. 
+# Each BUG, except for the last one, has its own set of ports. The last BUG has one port if there is only one layer, and two ports if there are multiple layers.
     for idx in range(len(arr_TFToTF_idx)):
         line += f"""const VAR_TYPE_32 LEN_{idx}={arr_TFToTF_idx[idx]};\n"""
     line += f"""#define HBM_PORT_WIDE_DATA ap_uint<{DRAM_WORD_SIZE * (CONCAT_FACTOR // mmap_count)}>
@@ -81,6 +83,7 @@ const VAR_TYPE_32 DB_TF_PORT_NUM={multi_ports_tf_mmap_count};
     elif(designParamsVar.REDUCTION_TYPE==CUSTOM_REDUCTION):
         line += gen_custom_red_header_file_definitions(designParamsVar)
 
+# {TF_FIFO_DEPTH} is determined by the pipeline depth of the BU task.
     line += f"""
 const VAR_TYPE_32 FIFO_DEPTH=2;
 const VAR_TYPE_32 TF_FIFO_DEPTH={TF_FIFO_DEPTH};

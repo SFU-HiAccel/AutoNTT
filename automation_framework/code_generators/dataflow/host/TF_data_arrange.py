@@ -84,11 +84,11 @@ def gen_fwd_TF_data_rearrange(designParamsVar):
 
     line = ""
 
-    if tf_mmap_count == 1:
+    if tf_mmap_count == 1:  # Case when a single BUG requires only one port to load the TF.
         line += """
 void fwd_organizeTFData(std::vector<WORD>& inp1, std::vector<TF_WIDE_DATA_PER_PARA_LIMB, tapa::aligned_allocator<TF_WIDE_DATA_PER_PARA_LIMB>> (&inp1_512b)[DB_TF_PORT_NUM]) 
 {
-  int sum_tf_per_stage = 1;
+  int sum_tf_per_stage = 1;  // The TF required by each BUG.
 
   for(int i=0;i<logN;i++)
   {
@@ -119,8 +119,8 @@ void fwd_organizeTFData(std::vector<WORD>& inp1, std::vector<TF_WIDE_DATA_PER_PA
 
   sum_tf_per_stage = 1;
   int distance_stage = halfN;
-  int outer = V_BU_NUM, inner = 1;
-  int previous_cycle = 0;
+  int outer = V_BU_NUM, inner = 1;  // Decide how to pack it based on the BUG and the layer within the BUG.
+  int previous_cycle = 0;  // The total depth of the previously packed TF.
   int idx_before = 0, idx_after = 0;
 
   for(int i=0;i<logN;i++)
@@ -181,11 +181,11 @@ void fwd_organizeTFData(std::vector<WORD>& inp1, std::vector<TF_WIDE_DATA_PER_PA
   }
 }
 """
-    elif tf_mmap_count == 2:
+    elif tf_mmap_count == 2:  # Case when a single BUG needs to combine two ports to load the TF.
         line += """
 void fwd_organizeTFData(std::vector<WORD>& inp1, std::vector<TF_WIDE_DATA_PER_PARA_LIMB, tapa::aligned_allocator<TF_WIDE_DATA_PER_PARA_LIMB>> (&inp1_512b)[DB_TF_PORT_NUM]) 
 {
-  int sum_tf_per_stage = 1;
+  int sum_tf_per_stage = 1;  // The TF required by each BUG.
 
   // initialize
   for (int i = 0; i < logN; i++) 
@@ -217,8 +217,8 @@ void fwd_organizeTFData(std::vector<WORD>& inp1, std::vector<TF_WIDE_DATA_PER_PA
 
   sum_tf_per_stage = 1;
   int distance_stage = halfN;
-  int outer = V_BU_NUM, inner = 1;
-  int previous_cycle = 0;
+  int outer = V_BU_NUM, inner = 1;  // Decide how to pack it based on the BUG and the layer within the BUG.
+  int previous_cycle = 0;  // The total depth of the previously packed TF.
   TF_WIDE_DATA_PER_PARA_LIMB packTF[2];
   int idx_before = 0, idx_after = 0;
 
