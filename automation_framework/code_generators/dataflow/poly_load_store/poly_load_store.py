@@ -44,6 +44,7 @@ def gen_poly_load_store_configs(designParamsVar):
     
     return is_full_load_store_needed, is_partial_load_store_needed, partial_load_store_size
 
+# generate the task code for FWD loading and INV storing
 def gen_fwd_load_inv_store_poly_code(designParamsVar, para_num_limbs):
 
     line = ""
@@ -128,6 +129,7 @@ def gen_fwd_load_inv_store_poly_code(designParamsVar, para_num_limbs):
 
     return line
 
+# generate the task code for FWD storing and INV loading
 def gen_fwd_store_inv_load_poly_code(designParamsVar, para_num_limbs):
 
     line = ""
