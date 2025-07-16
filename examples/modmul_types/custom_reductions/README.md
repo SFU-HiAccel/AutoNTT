@@ -179,8 +179,8 @@ vector<ap_uint<35>> arg2(PARA_LIMBS);
 
 - When a custom reduction method is passed, the tool automatically creates a test design with it and synthesis the design to extract BU details with the custom reduction.
 - Hence, if you have a specific device target, you should provide the platform with this switch. If not provided, tool default is set to `xilinx_u280_gen3x16_xdma_1_202211_1` and it will try to extract details with U280 FPGA.
-- An example input may looks like:
-`--platform xilinx_u50_gen3x16_xdma_5_202210_1`
+- An example input may looks like:<br>
+`--platform xilinx_u50_gen3x16_xdma_5_202210_1`<br>
 `--platform xilinx_u200_gen3x16_xdma_2_202110_1`
 
 ---
